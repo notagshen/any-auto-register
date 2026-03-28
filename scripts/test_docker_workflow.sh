@@ -27,5 +27,6 @@ assert_contains 'registry:\s*ghcr\.io' "GHCR registry 配置缺失"
 assert_contains 'docker/metadata-action@v5' "缺少 metadata 标签生成"
 assert_contains 'docker/build-push-action@v6' "缺少镜像构建推送步骤"
 assert_contains 'ghcr\.io/\$\{\{\s*github\.repository\s*\}\}' "镜像仓库未指向 ghcr.io/<owner>/<repo>"
+assert_contains 'platforms:\s*linux/amd64,linux/arm64' "缺少多架构构建 (amd64/arm64)"
 
 echo "PASS: Docker workflow 关键配置校验通过"
