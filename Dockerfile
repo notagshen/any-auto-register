@@ -9,10 +9,8 @@ RUN npm run build
 # Stage 2: Python 后端 + 运行环境
 FROM python:3.12-slim
 
-# 系统依赖：Chromium、Xvfb、x11vnc、noVNC
+# 系统依赖：Xvfb、x11vnc、noVNC + Playwright 运行库
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    # 浏览器运行依赖
-    chromium chromium-driver \
     # 虚拟显示 + VNC
     xvfb x11vnc \
     # noVNC 依赖
@@ -31,12 +29,17 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # 安装 Playwright 浏览器
 ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
-RUN playwright install chromium --with-deps || true
+RUN playwright install chromium || true
 
-# 复制后端代码
-COPY . .
-# 不需要 .venv 和 frontend 源码
-RUN rm -rf .venv frontend
+# 复制后端代码（按目录精确复制，避免把无关大目录带入镜像）
+COPY main.py ./main.py
+COPY api ./api
+COPY application ./application
+COPY core ./core
+COPY domain ./domain
+COPY infrastructure ./infrastructure
+COPY platforms ./platforms
+COPY services ./services
 
 # 复制前端构建产物
 COPY --from=frontend-builder /app/static ./static

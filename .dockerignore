@@ -5,6 +5,11 @@ __pycache__/
 *.pyc
 *.pyo
 .git/
+.github/
+.codex/
+docs/
+electron/
+README.md
 data/
 static/
 *.egg-info/
